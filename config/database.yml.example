@@ -1,0 +1,40 @@
+production:
+  adapter: mysql2
+  collation: utf8mb4_unicode_ci
+  database: rocksteady
+  encoding: utf8mb4
+  host: 127.0.0.1
+  password: vagrant
+  pool: 5
+  port: 3306
+  username: root
+development:
+  adapter: mysql2
+  collation: utf8mb4_unicode_ci
+  database: rocksteady
+  encoding: utf8mb4
+  host: 127.0.0.1
+  password: vagrant
+  pool: 5
+  port: 3306
+  username: root
+staging:
+  adapter: mysql2
+  collation: utf8mb4_unicode_ci
+  database: rocksteady
+  encoding: utf8mb4
+  host: 127.0.0.1
+  password: vagrant
+  pool: 5
+  port: 3306
+  username: root
+test:
+  adapter: mysql2
+  collation: utf8mb4_unicode_ci
+  database: rocksteady
+  encoding: utf8mb4
+  host: 127.0.0.1
+  password: vagrant
+  pool: 5
+  port: 3306
+  username: root

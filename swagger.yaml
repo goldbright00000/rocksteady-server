@@ -1,0 +1,485 @@
+swagger: '2.0'
+info:
+  version: 0.0.1
+  title: RS Server
+produces:
+  - application/json
+paths:
+  /api/graphics:
+    get:
+      description: 
+        Paginated list of all graphics available
+      parameters:
+        - name: offset
+          in: query
+          type: integer
+          default: 0
+        - name: limit
+          in: query
+          type: integer
+          default: 32
+        - name: tags
+          description: A list of tags, if multiple tags are given it will find graphics that have all the tags.
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+      responses:
+        200:
+          description: JSON containing graphics
+          schema:
+            type: object
+            properties:
+              graphics:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    graphics_url:
+                      type: string
+                      format: URL
+                      example: '/data/graphics/1.svg'
+                    name:
+                      type: string
+                      example: Factory 909 1
+                    tags:
+                      type: array
+                      example: ["racing", "motorbike", "motocross"]
+                      items:
+                        type: string
+                    multicoloured:
+                      type: boolean
+                    design_category:
+                      type: string
+                      enum: ["Design Element", "Fill", "Design Icon"]
+              meta:
+                type: object
+                properties:
+                  total:
+                    description: Total of graphics found
+                    type: integer
+  /api/colours:
+    get:
+      description: >
+        Returns a list of all visible colours.
+      responses:
+        200:
+          description: JSON containing all the colours
+          schema:
+            type: object
+            properties:
+              colours:
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                    display_rgb:
+                      type: string
+                      format: rgb
+                      example: #00000
+                    print_cmyk:
+                      type: string
+                      format: cmyk
+                      example: "0_0_0_1"
+                    group: 
+                      type: string
+                      example: Beige
+                    group_default:
+                      type: boolean
+                      example: true
+                    complementary_ids:
+                      type: array
+                      example: [2,3,4]
+                      items:
+                        type: integer
+                    contrasting_ids:
+                      type: array
+                      example: [1]
+                      items:
+                        type: integer
+  /api/themes:
+    get:
+      description: >
+        # Themes API
+
+        Given the parameters it returns a list of available themes that matches
+        the criteria.
+
+        ### Supported queries
+
+        * [/api/theme?product_line_name=Test Motorbike Decals]()
+
+        * [/api/theme?manufacturer_name=&target_name=]()
+
+        * [/api/theme?target_name=&target_category_name=]()
+
+        * [/api/theme?target_name=&grouped_year=]()
+      parameters:
+        - name: product_line_name
+          in: query
+          type: string
+          required: false
+        - name: manufacturer
+          in: query
+          type: string
+        - name: target_name
+          in: query
+          type: string
+        - name: target_category_name
+          in: query
+          type: string
+        - name: grouped_year
+          in: query
+          type: string
+      responses:
+        200:
+          description: All the available themes for the given criteria.
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  ordered_categories:
+                    type: array
+                    example: [Race Modern, Race Tradicional, Number Boards, Regulated]
+                    items:
+                      type: string
+                  ordered_filter:
+                    type: array
+                    example: [ Brands, Colours, Design, Styles, Features ]
+                    items:
+                      type: string
+              themes:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: Theme Name
+                    designer:
+                      type: object
+                      properties:
+                        designs:
+                          type: integer
+                          example: 32
+                        nationality:
+                          type: object
+                          properties:
+                            country_name:
+                              type: string
+                              example: Ireland
+                            region_id:
+                              type: integer
+                              example: 30
+                        name:
+                          type: string
+                          example: Pablo Picaso
+                        speciality:
+                          type: object
+                          properties:
+                            text:
+                              type: string
+                              example: Kawasaki KX250F 2017
+                            product_line_ids:
+                              type: array
+                              example: [ 1, 7 ]
+                              items:
+                                type: integer
+                    price:
+                      type: number
+                      example: 10.5
+                    filters:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            example: Colours
+                          ordered_values:
+                            type: array
+                            example:
+                              - blue
+                              - red
+                              - yellow
+                            items:
+                              type: string
+                    flags:
+                      type: array
+                      example:
+                        - name: Popular
+                          value: true
+                        - name: New
+                          value: false
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          value:
+                            type: boolean
+                    preview_urls:
+                      type: array
+                      example:
+                        - name: All Positions
+                          image_url: /data/themes/1.png
+                        - name: Front Number Plate
+                          image_url: /data/themes/1_front_number_plate.png
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          image_url:
+                            type: string
+                    regulation:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: MX1
+                        image:
+                          type: string
+                          example: >
+                            data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADIBAMAAABfdrOtAAAAG1BMVEX///8AAAC/v78/Pz8fHx9/f39fX1/f39+fn59TxuINAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABrklEQVR4nO3UT0/CMBjH8ccx2I56IF6nkHglQoxHnX/gSKIvwBi9TyWel7gX7tP2GQpEE4revp+EluX3ZN3ariIAAAAAAAAAAAAAAAAA8JvjwrXZsb94Ldbj5HtgVdtKJuPLuXbX4xu9Gl5N5qv54GrSXwZWtbVeIdmt3qSQtwdJSsnOVvNHkcUyCFVxjiqZaTeTtBb/W5UctkGoipMW+YV2H9Jom4828tICq4rTqXtuJV7kWdtsX5tuoc17m59bYFVx9qpOrV1anburqf50DSRbTsyhhMCq4gZpdMK06xSluzp1jS7xorZYZykEVhU3yCw8Xqd2LxGeOp9+vUhaSwisKmqM7mhzEGma5c3u5A8GaarN6ZJuv43zqew+XcnUHu/bwusX+NQu8LCS3Rde11jWt7Burby0Z3D9rls491v2QtxnNpT2Y9St1RQ+b9yTh8CqItz713dbqZS0lrA8bmv5V5Cunz0LQtX2emEJhrU/IGd2QPb0pjJw/8LSWBCqtnd0oObuxHeH+GD9qE9c3G8Dq4qWnfju9ae9EwKrAgAAAAAAAAAAAAAAAPAfPgFZpkiD9I8rfAAAAABJRU5ErkJggg==
+                          format: base64 encoded png
+                    description:
+                      type: string
+                      example: >-
+                        A bold, clean design inspired by James stewarts 2009
+                        race bike.
+                    design_time:
+                      type: integer
+                      description:
+                        90061 seconds  = 1 days, 1 hours, 1 minutes and 1 seconds.
+                      format: time spent in seconds
+                      example: 90061
+                    category:
+                      type: string
+                      example: Race Mordern
+                    metrics:
+                      type: array
+                      example:
+                        - name: views
+                          value: 30
+                        - name: applied
+                          value: 10
+                        - name: purchased
+                          value: 3
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          value:
+                            type: number
+        404:
+          description: A value given for a parameter couldn't be found in the database.
+        422:
+          description: >-
+            Required Parameters are missing, see the description for a list of
+            valid queries.
+  /api/prompted_features:
+    get:
+      description: >
+        It takes the interview information of a kit and returns the prompted
+        features in it.
+
+        ### There are few possible scenarios for the interview:
+
+        * TargetKit Interview:
+        [/api/prompted_features?product_line_id=1&target_kit_id=1]()
+
+        * Target Interview:
+        [/api/prompted_features?production_line_id=1&target_id=1]()
+
+        * Manufacturer Interview:
+        [/api/prompted_features?production_line_id=1&manufacturer_id=1&target_category_id=1]()
+
+        * Target Category Interview:
+        [/api/prompted_features?production_line_id=1&target_category_id=1]()
+
+      parameters:
+        - name: product_line_id
+          in: query
+          type: integer
+          required: true
+        - name: target_id
+          in: query
+          type: integer
+          required: false
+        - name: manufacturer_id
+          in: query
+          type: integer
+          required: false
+        - name: target_category_id
+          in: query
+          type: integer
+          required: false
+        - name: target_kit_id
+          in: query
+          type: integer
+          required: false
+        - name: use_id
+          in: query
+          type: integer
+          required: false
+        - name: use_category_id
+          in: query
+          type: integer
+          required: false
+        - name: rule_set_id
+          in: query
+          type: integer
+          required: false
+      responses:
+        200:
+          description: A sorted list of all the prompted features for the kit.
+          schema:
+            type: object
+            properties:
+              prompted_features:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Target Name
+                    diplay_name:
+                      type: string
+                      example: Name
+                    default_value:
+                      type: string
+                      example: 105 SX
+        422:
+          description: Invalid kit information.
+  /api/linked_features:
+    get:
+      description: >
+        It takes the interview information of a kit along with a theme_id and returns all the linked features in the theme.
+
+        ### There are few possible scenarios for the interview:
+
+        * TargetKit Interview:
+        [/api/linked_features?product_line_id=1&target_kit_id=1]()
+
+        * Target Interview:
+        [/api/linked_features?production_line_id=1&target_id=1]()
+
+        * Manufacturer Interview:
+        [/api/linked_features?production_line_id=1&manufacturer_id=1&target_category_id=1]()
+
+        * Target Category Interview:
+        [/api/linked_features?production_line_id=1&target_category_id=1]()
+
+        * Theme: Any of the above but including theme_id i.e
+        [/api/linked_features?production_line_id=1&target_category_id=1&theme_id=1-14]()
+      parameters:
+        - name: product_line_id
+          in: query
+          type: integer
+          required: true
+        - name: target_id
+          in: query
+          type: integer
+          required: false
+        - name: manufacturer_id
+          in: query
+          type: integer
+          required: false
+        - name: target_category_id
+          in: query
+          type: integer
+          required: false
+        - name: target_kit_id
+          in: query
+          type: integer
+          required: false
+        - name: theme_id
+          in: query
+          type: string
+          required: true
+        - name: use_id
+          in: query
+          type: integer
+          required: false
+        - name: use_category_id
+          in: query
+          type: integer
+          required: false
+        - name: rule_set_id
+          in: query
+          type: integer
+          required: false
+      responses:
+        200:
+          description: A list of all the linked features. Prompted Features will be put at the top of list ordered by the display_order attribute, supplied by the data team via seed load, other linked features will be put at the bottom in a natural order.
+          schema:
+            type: object
+            properties:
+              linked_features:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Target Name
+                    prompt:
+                      type: boolean
+                      example: true
+                    diplay_name:
+                      type: string
+                      example: Name
+                    default_value:
+                      type: string
+                      example: 105 SX
+  /api/most_used_colours:
+    post:
+      consumes:
+        - multipart/form-data
+      description: Most used colours in a image
+      parameters:
+        - name: image
+          in: formData
+          type: file
+          required: true
+        - name: limit
+          in: formData
+          type: integer
+          required: false
+          default: 5
+      responses:
+        422:
+          description: Not a valid image.
+        200:
+          description: The 5 most used colours in the given image
+          schema:
+            type: object
+            properties:
+              most_used_colours:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    rgb:
+                      type: string
+                      format: RGB
+                      example: "#FFFFFF"
+                    pixels:
+                      type: integer
+                      example: 10000

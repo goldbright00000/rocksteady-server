@@ -1,0 +1,5 @@
+#!/bin/bash
+
+chmod -c a+x bin/*
+echo 'BEFORE COMMIT: "bin" folder permissions were checked and corrected'
+exit 0

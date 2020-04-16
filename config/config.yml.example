@@ -1,0 +1,8 @@
+shipping_minimal_price: 20
+discount_type:
+  none: none
+  promotion: promotion
+  order_fix: order fix
+  change_design: change design
+editor_width: 0
+editor_height: 0

@@ -1,0 +1,7 @@
+pipelines:
+  default:
+    - step:
+       name: Push to test.motocal.com
+       script:
+         - hg push $REPO/$PROJECT --new-branch
+         - echo "Finished to update $REPO/$PROJECT"
